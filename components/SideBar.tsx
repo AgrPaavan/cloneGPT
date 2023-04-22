@@ -1,6 +1,7 @@
 "use client";
 
 import { db } from "@/firebase";
+import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 import { collection, orderBy, query } from "firebase/firestore";
 import { signOut, useSession } from "next-auth/react";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -40,12 +41,23 @@ const SideBar = () => {
       </div>
 
       {session && (
-        <img
-          onClick={() => signOut()}
-          src={session.user?.image!}
-          alt="profile picture"
-          className="h-12 w-12 rounded-full cursor-pointer mx-auto mb-2 hover:opacity-50 duration-100"
-        />
+        <div className="flex flex-row md:flex-col items-center justify-center">
+          <button className="md:hidden p-2 block text-white hover:text-black duration-75">
+            <ArrowLeftOnRectangleIcon className="h-12 w-12" />
+          </button>
+          <img
+            src={session.user?.image!}
+            alt="profile picture"
+            className="h-12 w-12 rounded-full cursor-pointer mx-auto mb-2"
+          />
+          <button
+            onClick={() => signOut()}
+            className="hidden md:flex flex-row p-2 items-center justify-center text-white border rounded-lg hover:text-black hover:bg-white duration-75 w-full"
+          >
+            <ArrowLeftOnRectangleIcon className="h-8 w-8" />
+            <span>Log Out</span>
+          </button>
+        </div>
       )}
     </div>
   );
