@@ -4,11 +4,14 @@ import { db } from "@/firebase";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
 import { collection, orderBy, query } from "firebase/firestore";
 import { useSession } from "next-auth/react";
+import { useEffect, useRef } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import Message from "./Message";
 
 const Chat = ({ chatId }: { chatId: string }) => {
   const { data: session } = useSession();
+
+  const scrollBottom = useRef<null | HTMLDivElement>(null);
 
   const [messages, loading, error] = useCollection(
     session &&
@@ -25,6 +28,10 @@ const Chat = ({ chatId }: { chatId: string }) => {
       ),
   );
 
+  useEffect(() => {
+    scrollBottom?.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden">
       {messages?.empty && (
@@ -38,6 +45,7 @@ const Chat = ({ chatId }: { chatId: string }) => {
       {messages?.docs.map((message) => (
         <Message key={message.id} message={message.data()} />
       ))}
+      <div ref={scrollBottom} />
     </div>
   );
 };
