@@ -1,6 +1,6 @@
 import openai from "./chatgpt";
 
-const query = async (prompt: string, model: string) => {
+const queryCompletions = async (prompt: string, model: string) => {
   const response = await openai
     .createCompletion({
       model,
@@ -19,4 +19,4 @@ const query = async (prompt: string, model: string) => {
   return response;
 };
 
-export default query;
+export default queryCompletions;

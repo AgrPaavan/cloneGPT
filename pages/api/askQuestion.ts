@@ -1,7 +1,10 @@
 import adminDb from "@/firebaseAdmin";
-import query from "@/lib/queryApi";
+import queryCompletions from "@/lib/queryApiCompletions";
 import admin from "firebase-admin";
 import type { NextApiRequest, NextApiResponse } from "next";
+import queryApi from "../../lib/queryApiChat";
+
+import models from "../../models.js";
 
 type Data = {
   answer: string;
@@ -23,7 +26,22 @@ export default async function handler(
     return;
   }
 
-  const response = await query(prompt, model);
+  let type: string;
+  models.map((listModels) => {
+    if (listModels.list.includes(model)) type = listModels.title;
+  });
+
+  let response;
+  switch (type!) {
+    case "completions":
+      response = await queryCompletions(prompt, model);
+      break;
+    case "chats":
+      response = await queryApi(prompt, chatId, model, session);
+      break;
+    default:
+      console.log(`Invalid model: ${model}`);
+  }
 
   const message: Message = {
     text: response || "ChatGPT was unable to answer that!",
