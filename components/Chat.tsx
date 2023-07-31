@@ -2,7 +2,7 @@
 
 import { db } from "@/firebase";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
-import { collection, orderBy, query } from "firebase/firestore";
+import { collection, doc, orderBy, query, updateDoc } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
